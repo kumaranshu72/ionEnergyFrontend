@@ -1,0 +1,81 @@
+<html>
+  <head>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="c3/c3.min.js"></script>
+  </head>
+  <body>
+    <div onclick="graph()">
+      <button>THERM0001</button>
+    </div>
+    <div id="chart_thermo"></div>
+  </body>
+  <script>
+    function graph() {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange=function() {
+        if (this.status == 200) {
+          var data1 = ['Month', 'Jan', 'Feb', "March", "April", "May", "June", "July", "August", "Sept", "Oct", "Nov", "Dec"]
+          var data2 = ['Temprature']
+          data2.push(this.responseText.data)
+          c3.generate({
+        unload: true,
+        bindto:'#chart_thermo',
+        size:{
+          width: 1048,
+          height: 650
+        },
+        data: {
+            x : 'Month',
+            columns: [
+                data1,
+                data2
+            ],
+            type: 'bar'
+        },
+        padding: {
+            bottom: 15
+        },
+        grid: {
+              x: {
+                  show: true
+              },
+              y: {
+                  show: true
+              }
+          },
+        axis: {
+            x: {
+                type: 'category',
+                tick: {
+                    rotate: 90,
+                    multiline: false
+                },
+                height: 90,
+                label: {
+                  'text' : 'Month',
+                  position: 'outer-center'
+                }
+            },
+            y: {
+                label: {
+                  text: "Temprature",
+                  position: 'outer-middle'
+                }
+            }
+          },
+        bar: {
+            width: {
+                ratio: 0.7 // this makes bar width 50% of length between ticks
+            }
+            // or
+            //width: 100 // this makes bar width 100px
+        }
+    });
+
+        }
+      };
+      xhttp.open("GET", "http://localhost:3000/api/v1/getData", true);
+      xhttp.send();
+    }
+  </script>
+</html>
